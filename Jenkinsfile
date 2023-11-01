@@ -72,6 +72,7 @@ pipeline {
             sh "git add deployment.yaml"
 	    sh "git status"
             sh "git commit -m '[UPDATE] test ${currentBuild.number} image versioning'"
+	    sh "git remote set-url origin git@github.com:2522001/k8s-manifest.git"
             sh "git push origin main"
         }
         post {

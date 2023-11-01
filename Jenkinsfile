@@ -60,6 +60,10 @@ pipeline {
 
     stage('K8S Manifest Update') {
         steps {
+	    sh "git config --global user.name '2522001'"
+	    sh "git config --global user.email 'minseo770@gmail.com'"
+            sh "git checkout -B main"
+
             git credentialsId: 'github_signin',
                 url: 'https://github.com/2522001/k8s-manifest.git',
                 branch: 'main'

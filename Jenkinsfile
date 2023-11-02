@@ -22,7 +22,6 @@ pipeline {
 
     stage('Docker Image Build') {
         steps {
-            sh "cp Dockerfile ./"
             sh "docker build . -t ${dockerHubRegistry}:${currentBuild.number}"
             sh "docker build . -t ${dockerHubRegistry}:latest"
         }

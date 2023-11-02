@@ -60,20 +60,18 @@ pipeline {
 
     stage('K8S Manifest Update') {
         steps {
-	    sh "git config --global user.name '2522001'"
-	    sh "git config --global user.email 'minseo770@gmail.com'"
+			      sh "git config --global user.name '2522001'"
+			      sh "git config --global user.email 'minseo770@gmail.com'"
             sh "git checkout -B main"
 
-            git credentialsId: 'github_signin',
-                url: 'https://github.com/2522001/k8s-manifest.git',
-                branch: 'main'
+            withCredentials([usernamePassword(credentialsId: 'github-signin', usernameVariable: 'GIT_USERNAME', passwordVaribale: 'GIT_PASSWORD')]) {
+								sh "sed -i 's/test_pipeline:.*\$/test_pipeline:${currentBuild.number}/g' deployment.yaml"
+                sh "git add deployment.yaml"
+                sh "git commit -m '[UPDATE] test ${currentBuild.number} image versioning'"
+                sh "git remote set-url origin git@github.com:2522001/k8s-manifest.git"
+                sh "git push -u origin main"
+						}
 
-            sh "sed -i 's/test_pipeline:.*\$/test_pipeline:${currentBuild.number}/g' deployment.yaml"
-            sh "git add deployment.yaml"
-	    sh "git status"
-            sh "git commit -m '[UPDATE] test ${currentBuild.number} image versioning'"
-	    sh "git remote set-url origin https://github.com/2522001/test.git"
-            sh "git push origin main"
         }
         post {
                 failure {

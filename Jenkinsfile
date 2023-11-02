@@ -22,6 +22,7 @@ pipeline {
 
     stage('Docker Image Build') {
         steps {
+            sh "cp Dockerfile ./"
             sh "docker build . -t ${dockerHubRegistry}:${currentBuild.number}"
             sh "docker build . -t ${dockerHubRegistry}:latest"
         }
@@ -60,17 +61,20 @@ pipeline {
 
     stage('K8S Manifest Update') {
         steps {
-			      sh "git config --global user.name '2522001'"
-			      sh "git config --global user.email 'minseo770@gmail.com'"
-            sh "git checkout -B main"
+            git credentialsId: 'github_signin',
+                url: 'https://github.com/2522001/k8s-manifest.git',
+                branch: 'main'
 
-            withCredentials([usernamePassword(credentialsId: 'github_signin', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-		sh "sed -i 's/test_pipeline:.*\$/test_pipeline:${currentBuild.number}/g' deployment.yaml"
-                sh "git add deployment.yaml"
-                sh "git commit -m '[UPDATE] test ${currentBuild.number} image versioning'"
-                sh "git push -u origin main"
-						}
+	    withCredentials([usernamePassword(credentialsId: 'github_signin', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                        sh "git config --global user.name '2522001'"
+                        sh "git config --global user.email 'minseo770@gmail.com'"
+                    }
 
+            sh "sed -i 's/test:.*\$/test:${currentBuild.number}/g' deployment.yaml"
+            sh "git add deployment.yaml"
+            sh "git commit -m '[UPDATE] test ${currentBuild.number} image versioning'"
+            sh "git remote set-url origin https://github.com/2522001/k8s-manifest.git"
+            sh "git push -u origin main"
         }
         post {
                 failure {

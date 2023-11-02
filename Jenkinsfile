@@ -64,8 +64,8 @@ pipeline {
 			      sh "git config --global user.email 'minseo770@gmail.com'"
             sh "git checkout -B main"
 
-            withCredentials([usernamePassword(credentialsId: 'github-signin', usernameVariable: 'GIT_USERNAME', passwordVaribale: 'GIT_PASSWORD')]) {
-								sh "sed -i 's/test_pipeline:.*\$/test_pipeline:${currentBuild.number}/g' deployment.yaml"
+            withCredentials([usernamePassword(credentialsId: 'github-signin', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+		sh "sed -i 's/test_pipeline:.*\$/test_pipeline:${currentBuild.number}/g' deployment.yaml"
                 sh "git add deployment.yaml"
                 sh "git commit -m '[UPDATE] test ${currentBuild.number} image versioning'"
                 sh "git remote set-url origin git@github.com:2522001/k8s-manifest.git"

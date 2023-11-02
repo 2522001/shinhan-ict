@@ -68,7 +68,6 @@ pipeline {
 		sh "sed -i 's/test_pipeline:.*\$/test_pipeline:${currentBuild.number}/g' deployment.yaml"
                 sh "git add deployment.yaml"
                 sh "git commit -m '[UPDATE] test ${currentBuild.number} image versioning'"
-                sh "git remote set-url origin https://github.com/2522001/k8s-manifest.git"
                 sh "git push -u origin main"
 						}
 

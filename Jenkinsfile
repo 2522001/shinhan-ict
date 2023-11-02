@@ -69,7 +69,7 @@ pipeline {
                         sh "git config --global user.email 'minseo770@gmail.com'"
                     }
 
-            sh "sed -i 's/test:.*\$/test:${currentBuild.number}/g' deployment.yaml"
+            sh "sed -i 's/test_pipeline:.*\$/test_pipeline:${currentBuild.number}/g' deployment.yaml"
             sh "git add deployment.yaml"
 	    sh "git status"
             sh "git commit -m '[UPDATE] test ${currentBuild.number} image versioning'"

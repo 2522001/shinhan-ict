@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nhn-nginx-deployment
+  labels:
+    app: nhn-nginx
+spec:
+  replicas: 3  # pod의 컨테이너를 몇 개 복사할 건지
+  selector:
+    matchLabels:
+      app: nhn-nginx
+  template:
+    metadata:
+      labels:
+        app: nhn-nginx
+    spec:
+      containers:
+      - name: nhn-webserver
+        image: minseo205/test_pipeline:15
+        ports:
+        - containerPort: 80

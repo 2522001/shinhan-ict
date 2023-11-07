@@ -1,8 +1,8 @@
 pipeline {
   agent any
   environment {
-    dockerHubRegistry = 'minseo205/test_pipeline'
-    dockerHubRegistryCredential = 'docker_credentials'
+    dockerHubRegistry = 'minseo205/test-pipeline'
+    dockerHubRegistryCredential = 'docker-credentials'
   }
   stages {
 
@@ -58,32 +58,5 @@ pipeline {
         }
     }
 
-    stage('K8S Manifest Update') {
-        steps {
-            git credentialsId: 'github_signin',
-                url: 'https://github.com/2522001/k8s-manifest.git',
-                branch: 'main'
 
-	    withCredentials([usernamePassword(credentialsId: 'github_signin', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                        sh "git config --global user.name '2522001'"
-                        sh "git config --global user.email 'minseo770@gmail.com'"
-                    }
-
-            sh "sed -i 's/test_pipeline:.*\$/test_pipeline:${currentBuild.number}/g' deployment.yaml"
-            sh "git add deployment.yaml"
-	    sh "git status"
-            sh "git commit -m '[UPDATE] test ${currentBuild.number} image versioning'"
-            sh "git remote set-url origin https://github.com/2522001/k8s-manifest.git"
-            sh "git push -u origin main"
-        }
-        post {
-                failure {
-                  echo 'K8S Manifest Update failure !'
-                }
-                success {
-                  echo 'K8S Manifest Update success !'
-                }
-        }
-    }
-  }
 }

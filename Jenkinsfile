@@ -70,7 +70,7 @@ pipeline {
 
 	    sh "git config --global user.email ${gitEmail}"
             sh "git config --global user.name ${gitName}"
-            sh "sed -i 's/tomcat:.*/tomcat:${currentBuild.number}/g' deployment.yaml"
+            sh "sed -i 's/test_pipeline:.*\$/test_pipeline:${currentBuild.number}/g' deployment.yaml"
             sh "git add ."
             sh "git commit -m 'fix:${dockerHubRegistry} ${currentBuild.number} image versioning'"
             sh "git branch -M main"

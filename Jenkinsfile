@@ -1,9 +1,13 @@
 pipeline {
   agent any
   environment {
-    dockerHubRegistry = 'minseo205/test-pipeline'
+    dockerHubRegistry = 'minseo205/k8s-project'
     dockerHubRegistryCredential = 'docker-credentials'
+    githubCredential = 'github-credentials'
+    gitEmail = 'minseo770@gmail.com'
+    gitName = '2522001'
   }
+
   stages {
 
     stage('Checkout Application Git Branch') {
@@ -58,6 +62,31 @@ pipeline {
         }
     }
 
+    stage('K8S Manifest Update') {
+        steps {
+            git credentialsId: githubCredential,
+                url: 'https://github.com/2522001/test.git',
+                branch: 'main'
+
+	    sh "git config --global user.email ${gitEmail}"
+            sh "git config --global user.name ${gitName}"
+            sh "sed -i 's/tomcat:.*/tomcat:${currentBuild.number}/g' deployment.yaml"
+            sh "git add ."
+            sh "git commit -m 'fix:${dockerHubRegistry} ${currentBuild.number} image versioning'"
+            sh "git branch -M main"
+            sh "git remote remove origin"
+            sh "git remote add origin https://github.com/2522001/test.git"
+            sh "git push -u origin main"
+        }
+        post {
+                failure {
+                  echo 'K8S Manifest Update failure !'
+                }
+                success {
+                  echo 'K8S Manifest Update success !'
+                }
+        }
+    }
     
   }
 }

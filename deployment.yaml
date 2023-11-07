@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: minseo205/k8s-project
+        image: minseo205/k8s-project:8
         ports:
         - containerPort: 80

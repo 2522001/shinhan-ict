@@ -1,8 +1,8 @@
 pipeline {
   agent any
   environment {
-    dockerHubRegistry = 'minseo205/test_pipeline'
-    dockerHubRegistryCredential = 'docker_credentials'
+    dockerHubRegistry = 'minseo205/test-pipeline'
+    dockerHubRegistryCredential = 'docker-credentials'
   }
   stages {
 

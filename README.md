@@ -117,7 +117,7 @@ master 노드에 kubectl apply 명령어를 통해 설치했습니다. ArgoCD의
 ArgoCD Server의 파드 로그를 확인해보니, Argo-Redis 부분에서 timeout 오류가 발생하고 있었습니다. redis 관련 서비스 및 파드를 다시 설치해보고 보안그룹에서 redis의 포트를 열어주는 등 다양한 시도를 해보았으나 여전히 실패했습니다. 쿠버네티스와 ArgoCD 간 버전 호환성 문제일 가능성이 높다고 하는데 아마 이 문제가 아닐까 싶습니다.
 
 <p align="center">
-  <img src="https://github.com/2522001/shinhan-ict/assets/83651335/609981fe-3c57-4d7f-84f5-60d3eaa77369" width="600">
+  <img src="https://github.com/2522001/shinhan-ict/assets/83651335/1a1bb508-fe6a-4595-acae-102dfd953a1c" width="600">
 </p>
 
 **CI/CD: Jenkins**

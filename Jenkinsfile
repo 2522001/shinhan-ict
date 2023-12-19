@@ -64,19 +64,16 @@ pipeline {
 
     stage('K8S Manifest Update') {
         steps {
-            git credentialsId: githubCredential,
-                url: 'https://github.com/2522001/test.git',
-                branch: 'main'
+            script {
+                checkout([$class: 'GitSCM', branches: [[name: 'main']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: githubCredential, url: 'https://github.com/2522001/test.git']]])
 
-	    sh "git config --global user.email ${gitEmail}"
-            sh "git config --global user.name ${gitName}"
-            sh "sed -i 's/k8s-project.*\$/k8s-project:${currentBuild.number}/g' deployment.yaml"
-            sh "git add ."
-            sh "git commit -m 'fix:${dockerHubRegistry} ${currentBuild.number} image versioning'"
-            sh "git branch -M main"
-            sh "git remote remove origin"
-            sh "git remote add origin https://github.com/2522001/test.git"
-            sh "git push -u origin main"
+                sh "git config --global user.email ${gitEmail}"
+                sh "git config --global user.name ${gitName}"
+                sh "sed -i 's/k8s-project.*\$/k8s-project:${currentBuild.number}/g' deployment.yaml"
+                sh "git add ."
+                sh "git commit -m '[fix] ${dockerHubRegistry} ${currentBuild.number} image versioning'"
+                sh "git push origin main"
+            }
         }
         post {
                 failure {
